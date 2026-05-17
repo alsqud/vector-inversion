@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Logs
+*.log
+
+# Secrets
+.env
+*.key
+*.token
+paths.local.yaml
+
+# Large data
+data/defense_terms_clean_v2/
+data/raw/
+data/processed/
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+
+# Embedding caches
+outputs/
+embedding_cache/
+cache/
+
+# Prediction-level outputs that may contain original text
+results/predictions/
+results/*_samples.csv
+results/*_predictions.json
+
+# Keep aggregated results
+!results/.gitkeep
+!results/README.md
+!results/*summary*.csv
+!results/*paper*.csv
+!results/*final*.csv
+
+# Figures
+figures/*.pdf
+figures/*.png
+!figures/.gitkeep
+!figures/README.md
