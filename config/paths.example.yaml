@@ -1,0 +1,8 @@
+# Copy this file to paths.local.yaml if you want to use local absolute paths.
+# Do not commit paths.local.yaml to GitHub.
+
+data_dir: /path/to/defense_terms_clean_v2
+checkpoint_path: /path/to/best_model.pt
+embedding_cache_dir: /path/to/embedding_cache
+result_dir: /path/to/results
+figure_dir: /path/to/figures
