@@ -1,0 +1,99 @@
+project:
+  name: vector-inversion
+  description: Defense-domain RAG embedding inversion reproducibility configuration
+
+paths:
+  data_dir: data/defense_terms_clean_v2
+  result_dir: results
+  figure_dir: figures
+  checkpoint_path: checkpoints/best_model.pt
+  embedding_cache_dir: outputs/embedding_cache
+
+models:
+  e0_embedding: jhgan/ko-sbert-sts
+  e1_embedding_dir: outputs/E1_positive_pair_jhgan_ko_sbert_sts/model
+  generator_model: gogamza/kobart-base-v2
+
+data:
+  train_file: train.txt
+  val_file: val.txt
+  test_file: test.txt
+  train_size: 25620
+  val_size: 3203
+  test_size: 3203
+
+attacker:
+  embedding_dim: 768
+  max_len: 96
+  prefix_len: 16
+  batch_size: 32
+  num_beams: 4
+  no_repeat_ngram_size: 3
+  repetition_penalty: 1.15
+  length_penalty: 1.0
+  early_stopping: true
+  truncate_ratio: 1.2
+
+embedding_finetuning:
+  base_model: jhgan/ko-sbert-sts
+  method: positive_pair
+  loss: MultipleNegativesRankingLoss
+  epochs: 3
+  batch_size: 64
+  warmup_steps: 120
+  train_examples: 25620
+  steps_per_epoch: 401
+  total_steps: 1203
+
+evaluation:
+  retrieval_metrics:
+    - Hit@1
+    - Hit@5
+    - MRR
+  inversion_metrics:
+    - Cosine_Mean
+    - Char_ROUGE_L_F1
+    - Keyword_Recall
+    - Term_Hit_Rate
+
+protection:
+  representative_noise_sigma: 0.03
+  representative_pca_dim: 256
+
+seed_repeat:
+  seeds:
+    - 42
+    - 123
+    - 2024
+
+  baseline_noise_conditions:
+    - model: E0
+      protection: baseline
+      sigma: 0.0
+    - model: E1
+      protection: baseline
+      sigma: 0.0
+    - model: E0
+      protection: noise
+      sigma: 0.03
+    - model: E1
+      protection: noise
+      sigma: 0.03
+
+  pca_conditions:
+    - model: E0
+      protection: pca
+      pca_dim: 256
+      sigma: 0.0
+    - model: E1
+      protection: pca
+      pca_dim: 256
+      sigma: 0.0
+    - model: E0
+      protection: pca_noise
+      pca_dim: 256
+      sigma: 0.03
+    - model: E1
+      protection: pca_noise
+      pca_dim: 256
+      sigma: 0.03
